@@ -1,0 +1,32 @@
+import pandas as pd
+
+import matplotlib.pyplot as plt
+plt.rcParams["figure.figsize"] = (16,8)
+
+import cv2
+import pytesseract
+
+img = cv2.imread('IOTPIC.png')
+img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+
+plt.imshow(img)
+plt.show()
+
+d = pytesseract.image_to_data(img, output_type = pytesseract.Output.DICT)
+# print(d.keys())
+" ".join(d['text']).strip()
+
+find_this = "and"
+
+pdf = pd.DataFrame(d)
+d1 = pdf.query("text == @find_this").reset_index(drop = True)
+
+img = cv2.imread('IOTPIC.png')
+img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+
+for i in range(d1.shape[0]):
+    (x, y, w, h) = (d1['left'][i], d1['top'][i], d1['width'][i], d1['height'][i])
+    img = cv2.rectangle(img, (x, y), (x + w, y + h), (0, 255, 0), 6)
+    
+plt.imshow(img)
+plt.show()
