@@ -1,3 +1,3 @@
 # ocr
 
-picture to text converted 
+picture to text converted using tesseract and opencv
